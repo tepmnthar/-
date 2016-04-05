@@ -38,3 +38,36 @@ Image Maps把页面上分别获取多个独立图片改成获取一张多个图�
 <div style="background-image:url('...gif');background-positive:-x px -y px";width:w px;height:h px>
 此处x是大图（左上为0,0）中x偏移量，y是y偏移量，w、h分别为长宽
 ```
+
+**因为大图减少了图片的头部信息，所以实际上组合之后的大图大小会小一些**
+
+####Inline Images
+
+直接将图片数据内嵌在html页面里，格式是`data:[<mediatype>][;base64],<data>`
+
+```
+<IMG ALT="Red Star"
+SRC="data:image/gif;base64,R0lGODlhDAAMALMLAPN8ffBiYvWW
+lvrKy/FvcPewsO9VVfajo+w6O/zl5estLv/8/AAAAAAAAAAAAAAAACH5BAEA
+AAsALAAAAAAMAAwAAAQzcElZyryTEHyTUgknHd9xGV+qKsYirKkwDYiKDBia
+tt2H1KBLQRFIJAIKywRgmhwAIlEEADs=">
+```
+
+弊端：内嵌的图片不会被浏览器缓存，所以频繁使用的图片不要这么做。比较好的做法是将背景图片内嵌，并且样式写在外部链接的样式文件中，这样会被缓存。如：
+
+```
+.home { background-image: url(data:image/gif;base64,R0lGODlhHwAfAPcAAAAAAIxKA...);}
+.gift { background-image: url(data:image/gif;base64,R0lGODlhHwAfAPcAAAAAAABCp...);}
+.cart { background-image: url(data:image/gif;base64,R0lGODlhHwAfAPcAAAAAADlCr...);}
+.settings { background-image: url(data:image/gif;base64,R0lGODlhHwAfAPcAAAAAA...);}
+.help { background-image: url(data:image/gif;base64,R0lGODlhHwAfAPcAAAAAALW1t...);}
+```
+
+####Combined Scripts and Stylesheets
+
+ 将css和script文件合到一起，可以有效减少请求数量
+
+---
+> *Make fewer HTTP requests.*
+
+###2.Use a Content Delivery Network
