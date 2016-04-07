@@ -70,4 +70,55 @@ tt2H1KBLQRFIJAIKywRgmhwAIlEEADs=">
 ---
 > *Make fewer HTTP requests.*
 
-###2.Use a Content Delivery Network
+###2.使用CDN
+####CDN
+将静态文件（css，js，image，flash）存在地域分布式（页面组件）服务器上
+
+---
+> *Use a content delivery network.*
+
+###3.标头添加过期时间
+####过期标头
+```
+Expires: Thu, 15 Apr 2010 20:00:00 GMT
+```
+
+在过期时间前，浏览器会使用缓存下来的Response
+####最大时长和mod_expires
+```
+Cache-Control: max-age=315360000
+```
+
+**HTTP/1.1**中增加`Cache-Control`标头来代替`Expires`，因为`Expires`使用固定日期，会造成服务器端和客户端时间同步的问题，而且每次请求浏览器都会做一次检查，服务器端也需要重新生成新的过期日期
+
+在同时使用`Expires`和` Cache-Control`时，后者会覆盖前者
+
+**mod_expires**模块根据MIME类型和时长设置（年月日等），自动生成`Expires`和`max-age`
+
+```
+<FilesMatch "\.(gif|jpg|js|css)$">
+ExpiresDefault "access plus 10 years"
+</FilesMatch>
+```
+
+以下是在请求到达时，服务器生成的
+
+```
+Expires: Sun, 16 Oct 2016 05:43:02 GMT
+Cache-Control: max-age=315360000
+```
+
+####Empty Cache vs. Primed Cache
+适用于一次会话，多个页面的情况
+
+####不仅限于图片
+js、css、flash、image应该设置长过期时间，html则不然
+####修改文件名
+在页面组件被修改时，修改文件名以让用户请求最新版本
+
+在名称中包含版本号
+
+---
+> *Add a far future Expires header to your components.*
+
+###4.压缩组件
